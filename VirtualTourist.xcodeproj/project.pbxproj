@@ -9,21 +9,23 @@
 /* Begin PBXBuildFile section */
 		A10A12EC2473859700AE1AAA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10A12EB2473859700AE1AAA /* AppDelegate.swift */; };
 		A10A12EE2473859700AE1AAA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10A12ED2473859700AE1AAA /* SceneDelegate.swift */; };
-		A10A12F02473859700AE1AAA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10A12EF2473859700AE1AAA /* ViewController.swift */; };
+		A10A12F02473859700AE1AAA /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10A12EF2473859700AE1AAA /* MapViewController.swift */; };
 		A10A12F32473859700AE1AAA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A10A12F12473859700AE1AAA /* Main.storyboard */; };
 		A10A12F52473859A00AE1AAA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10A12F42473859A00AE1AAA /* Assets.xcassets */; };
 		A10A12F82473859A00AE1AAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A10A12F62473859A00AE1AAA /* LaunchScreen.storyboard */; };
+		A1EF9806247438E900727DC0 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EF9805247438E900727DC0 /* PhotoAlbumViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A10A12E82473859700AE1AAA /* VirtualTourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VirtualTourist.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A10A12EB2473859700AE1AAA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A10A12ED2473859700AE1AAA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		A10A12EF2473859700AE1AAA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A10A12EF2473859700AE1AAA /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A10A12F22473859700AE1AAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A10A12F42473859A00AE1AAA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A10A12F72473859A00AE1AAA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A10A12F92473859A00AE1AAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A1EF9805247438E900727DC0 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,13 +60,30 @@
 			children = (
 				A10A12EB2473859700AE1AAA /* AppDelegate.swift */,
 				A10A12ED2473859700AE1AAA /* SceneDelegate.swift */,
-				A10A12EF2473859700AE1AAA /* ViewController.swift */,
+				A10A12F92473859A00AE1AAA /* Info.plist */,
+				A176B2C52474347C006197EA /* controller */,
+				A176B2C6247434A0006197EA /* assets */,
+			);
+			path = VirtualTourist;
+			sourceTree = "<group>";
+		};
+		A176B2C52474347C006197EA /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				A10A12EF2473859700AE1AAA /* MapViewController.swift */,
+				A1EF9805247438E900727DC0 /* PhotoAlbumViewController.swift */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		A176B2C6247434A0006197EA /* assets */ = {
+			isa = PBXGroup;
+			children = (
 				A10A12F12473859700AE1AAA /* Main.storyboard */,
 				A10A12F42473859A00AE1AAA /* Assets.xcassets */,
 				A10A12F62473859A00AE1AAA /* LaunchScreen.storyboard */,
-				A10A12F92473859A00AE1AAA /* Info.plist */,
 			);
-			path = VirtualTourist;
+			path = assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,9 +157,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A10A12F02473859700AE1AAA /* ViewController.swift in Sources */,
+				A10A12F02473859700AE1AAA /* MapViewController.swift in Sources */,
 				A10A12EC2473859700AE1AAA /* AppDelegate.swift in Sources */,
 				A10A12EE2473859700AE1AAA /* SceneDelegate.swift in Sources */,
+				A1EF9806247438E900727DC0 /* PhotoAlbumViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
