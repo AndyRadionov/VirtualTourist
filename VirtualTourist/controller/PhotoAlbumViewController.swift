@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import MapKit
 
 class PhotoAlbumViewController: UIViewController {
 
+    var selectedPin: Pin!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -18,6 +18,9 @@
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HyT-Mi-WmB">
                                 <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <connections>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="RBM-1D-dMF"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -31,7 +34,8 @@
                     </view>
                     <navigationItem key="navigationItem" id="6qx-Fd-nae"/>
                     <connections>
-                        <segue destination="QUl-zz-zXd" kind="show" id="4NV-Uw-UET"/>
+                        <outlet property="mapView" destination="HyT-Mi-WmB" id="dsl-6b-yhc"/>
+                        <segue destination="QUl-zz-zXd" kind="show" identifier="showPhotoAlbum" id="4NV-Uw-UET"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -96,6 +100,7 @@
                         <viewLayoutGuide key="safeArea" id="7qV-A9-dM0"/>
                     </view>
                     <navigationItem key="navigationItem" id="z4H-Bi-f9Q"/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Jcw-QK-OXb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
