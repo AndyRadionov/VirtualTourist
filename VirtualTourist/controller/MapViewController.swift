@@ -39,11 +39,6 @@ class MapViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let controller = segue.destination as! PhotoAlbumViewController
-        controller.selectedPin = selectedPin
-    }
-    
     @IBAction func longPressGesture(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .ended {
             let locationInView = sender.location(in: mapView)
@@ -54,10 +49,8 @@ class MapViewController: UIViewController {
     }
     
     private func showInstructionsIfNeeded() {
-        let isInstructionsShown = UserDefaults.standard.bool(forKey: "showInstruction")
-        if !isInstructionsShown {
+        if !UserDefaults.standard.bool(forKey: "showInstruction") {
             showAlert(title: "Instructions", message: "Long press on location to put pin", presenter: self)
-        } else {
             UserDefaults.standard.set(true, forKey: "showInstruction")
         }
     }
@@ -109,18 +102,22 @@ class MapViewController: UIViewController {
 extension MapViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKMarkerAnnotationView
         if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = false
-            pinView!.pinTintColor = .red
         } else {
             pinView!.annotation = annotation
         }
         return pinView
     }
     
-    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let controller = segue.destination as! PhotoAlbumViewController
+        controller.selectedPin = selectedPin
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let coordinate = view.annotation!.coordinate
         selectedPin = pins.first { (pin) -> Bool in
             return pin.latitude == coordinate.latitude && pin.longitude == coordinate.longitude

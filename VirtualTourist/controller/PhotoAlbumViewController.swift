@@ -14,6 +14,7 @@ class PhotoAlbumViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var photosCollectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshButton: UIBarButtonItem!
     
     var selectedPin: Pin!
@@ -36,6 +37,7 @@ class PhotoAlbumViewController: UIViewController {
     }
     
     @IBAction func reloadPhotos(_ sender: Any) {
+        activityIndicator.startAnimating()
         loadPhotosFromNetwork()
     }
         
@@ -93,7 +95,6 @@ class PhotoAlbumViewController: UIViewController {
                         photo.photo = data
                         DispatchQueue.main.async {
                             try? self.dataController.backgroundContext.save()
-                            self.refreshButton.isEnabled = true
                         }
                     }
                 })
@@ -106,6 +107,8 @@ class PhotoAlbumViewController: UIViewController {
 extension PhotoAlbumViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         photosCollectionView.reloadData()
+        activityIndicator.stopAnimating()
+        refreshButton.isEnabled = true
     }
 }
 
@@ -120,10 +123,11 @@ extension PhotoAlbumViewController: UICollectionViewDelegate, UICollectionViewDa
         
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath) as! PhotoCell
+        cell.activityIndicator.startAnimating()
         let photo = fetchedResultsController.object(at: indexPath)
         if (photo.photo != nil) {
             cell.imageView.image = UIImage(data: photo.photo!)
-            cell.activityIndicator.isHidden = true
+            cell.activityIndicator.stopAnimating()
         }
         return cell
     }

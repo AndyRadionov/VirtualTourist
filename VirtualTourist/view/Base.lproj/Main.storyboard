@@ -107,6 +107,10 @@
                                     <outlet property="delegate" destination="QUl-zz-zXd" id="Mbb-mK-rMX"/>
                                 </connections>
                             </collectionView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="tgu-pD-QmV">
+                                <rect key="frame" x="188.5" y="456.5" width="37" height="37"/>
+                                <color key="color" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f8u-gu-3dr">
                                 <rect key="frame" x="0.0" y="818" width="414" height="44"/>
                                 <constraints>
@@ -126,8 +130,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="7qV-A9-dM0" firstAttribute="trailing" secondItem="19t-Gi-eVu" secondAttribute="trailing" id="0Pd-7c-2I6"/>
+                            <constraint firstItem="tgu-pD-QmV" firstAttribute="centerY" secondItem="7qV-A9-dM0" secondAttribute="centerY" id="0kO-yf-o1j"/>
                             <constraint firstItem="7qV-A9-dM0" firstAttribute="trailing" secondItem="aWc-SU-Is8" secondAttribute="trailing" id="68E-uW-EQf"/>
                             <constraint firstItem="aWc-SU-Is8" firstAttribute="leading" secondItem="7qV-A9-dM0" secondAttribute="leading" id="9LL-Zr-rsV"/>
+                            <constraint firstItem="tgu-pD-QmV" firstAttribute="centerX" secondItem="7qV-A9-dM0" secondAttribute="centerX" id="CsB-Wp-HLW"/>
                             <constraint firstItem="aWc-SU-Is8" firstAttribute="top" secondItem="7qV-A9-dM0" secondAttribute="top" id="FqY-uS-Cv4"/>
                             <constraint firstAttribute="trailing" secondItem="f8u-gu-3dr" secondAttribute="trailing" id="Jtq-U3-zb2"/>
                             <constraint firstItem="19t-Gi-eVu" firstAttribute="leading" secondItem="7qV-A9-dM0" secondAttribute="leading" id="K0d-80-0hO"/>
@@ -141,6 +147,7 @@
                     <navigationItem key="navigationItem" id="z4H-Bi-f9Q"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="tgu-pD-QmV" id="fVP-a3-73k"/>
                         <outlet property="mapView" destination="aWc-SU-Is8" id="N1z-Gl-lT4"/>
                         <outlet property="photosCollectionView" destination="19t-Gi-eVu" id="i1t-ys-XIt"/>
                         <outlet property="refreshButton" destination="sTi-h6-UFi" id="R2j-JH-dUM"/>
