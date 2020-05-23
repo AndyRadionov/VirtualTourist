@@ -10,11 +10,13 @@ import UIKit
 import MapKit
 import CoreData
 
-class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognizerDelegate {
+class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     
     var pins = [Pin]()
+    var selectedPin: Pin!
+    
     var dataController: DataController {
        let object = UIApplication.shared.delegate
        let appDelegate = object as! AppDelegate
@@ -23,6 +25,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        showInstructionsIfNeeded()
         initMap()
     }
     
@@ -32,63 +35,55 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        viewWillDisappear(animated)
+        super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = false
-            pinView!.pinTintColor = .red
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let controller = segue.destination as! PhotoAlbumViewController
+        controller.selectedPin = selectedPin
+    }
+    
+    @IBAction func longPressGesture(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .ended {
+            let locationInView = sender.location(in: mapView)
+            let tappedCoordinate = mapView.convert(locationInView , toCoordinateFrom: mapView)
+            savePin(tappedCoordinate)
+            addAnnotation(tappedCoordinate)
+        }
+    }
+    
+    private func showInstructionsIfNeeded() {
+        let isInstructionsShown = UserDefaults.standard.bool(forKey: "showInstruction")
+        if !isInstructionsShown {
+            showAlert(title: "Instructions", message: "Long press on location to put pin", presenter: self)
         } else {
-            pinView!.annotation = annotation
+            UserDefaults.standard.set(true, forKey: "showInstruction")
         }
-        return pinView
     }
     
-    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-        let coordinate = view.annotation!.coordinate
-        let selectedPin = pins.first { (pin) -> Bool in
-            return pin.latitude == coordinate.latitude && pin.longitude == coordinate.longitude
-        }
-        let viewController = storyboard?.instantiateViewController(withIdentifier: "showPhotoAlbum") as! PhotoAlbumViewController
-        viewController.selectedPin = selectedPin
-        self.navigationController?.pushViewController(viewController, animated: true)
-    }
-    
-    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        mapView.region.save(withKey: "mapRegion")
-    }
-    
-    @objc func longPress(gestureRecognizer: UILongPressGestureRecognizer) {
-        let touchPoint: CGPoint = gestureRecognizer.location(in: mapView)
-        let coordinate = mapView.convert(touchPoint, toCoordinateFrom: mapView)
-
+    private func savePin(_ coordinate: CLLocationCoordinate2D) {
         let pin = Pin(context: dataController.viewContext)
         pin.latitude = coordinate.latitude
         pin.longitude = coordinate.longitude
         try? dataController.viewContext.save()
-        
         pins.append(pin)
-        
+    }
+    
+    private func addAnnotation(_ coordinate: CLLocationCoordinate2D) {
         let annotation = MKPointAnnotation()
-        
         annotation.coordinate = coordinate
-        annotation.title = "\(pins.firstIndex(of: pin)!)"
         mapView.addAnnotation(annotation)
     }
     
     private func loadPins() {
         let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
     
-        if let result = try? dataController.viewContext.fetch(fetchRequest) {
-            if (result.count > 0) {
-                pins = result
+        if let pinsResult = try? dataController.viewContext.fetch(fetchRequest) {
+            if (pinsResult.count > 0) {
+                pins = pinsResult
                 var annotations = [MKPointAnnotation]()
-                for pin in result {
+                for pin in pinsResult {
                     let lat = CLLocationDegrees(pin.latitude)
                     let long = CLLocationDegrees(pin.longitude)
                     let annotation = MKPointAnnotation()
@@ -104,14 +99,37 @@ class MapViewController: UIViewController, MKMapViewDelegate, UIGestureRecognize
     }
     
     private func initMap() {
-        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
-        gestureRecognizer.minimumPressDuration = 2.0
-        gestureRecognizer.delegate = self
-        mapView.addGestureRecognizer(gestureRecognizer)
         if let region = MKCoordinateRegion.load(withKey: "mapRegion") {
             mapView.region = region
         }
         loadPins()
+    }
+}
+
+extension MapViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = false
+            pinView!.pinTintColor = .red
+        } else {
+            pinView!.annotation = annotation
+        }
+        return pinView
+    }
+    
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        let coordinate = view.annotation!.coordinate
+        selectedPin = pins.first { (pin) -> Bool in
+            return pin.latitude == coordinate.latitude && pin.longitude == coordinate.longitude
+        }
+        performSegue(withIdentifier: "showPhotoAlbum", sender: self)
+    }
+    
+    func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
+        mapView.region.save(withKey: "mapRegion")
     }
 }
 

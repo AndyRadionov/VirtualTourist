@@ -18,6 +18,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         dataController.load()
         return true
     }
-
 }
-
