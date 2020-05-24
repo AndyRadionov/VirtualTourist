@@ -69,13 +69,14 @@ class PhotoAlbumViewController: UIViewController {
         
     func loadPhotosFromNetwork() {
         self.refreshButton.isEnabled = false
-        ApiClient.loadList(latitude: selectedPin.latitude, longitude: selectedPin.longitude) { (photosResponse, error) in
+        ApiClient.loadList(latitude: selectedPin.latitude, longitude: selectedPin.longitude,
+                           page: Int(arc4random_uniform(UInt32(selectedPin.photosPages)))) { (photosList, error) in
             if error != nil {
                 self.showErrorAlert(error!, self)
                 return
             }
-                
-            let photos = photosResponse!.photos.photo.map { (photoResponse) -> Photo in
+                            
+            let photos = photosList!.photo.map { (photoResponse) -> Photo in
                 let photo = Photo(context: self.dataController.viewContext)
                 photo.id = photoResponse.id
                 photo.farmId = "\(photoResponse.farm)"
@@ -85,6 +86,7 @@ class PhotoAlbumViewController: UIViewController {
             }
         
             DispatchQueue.main.async {
+                self.selectedPin.photosPages = Int32(photosList!.pages)
                 self.selectedPin.removeFromPhotos(self.selectedPin.photos!)
                 try? self.dataController.viewContext.save()
                 

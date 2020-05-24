@@ -14,14 +14,14 @@ class ApiClient {
         static let baseUrl = "https://api.flickr.com/services/rest/?"
         static let apiKey = "PUT_YOUR_FLICKR_API_KEY_HERE"
         
-        case list(latitude: Double, longitude: Double)
-        case detail(farmId: String, serverId: String, photoId: String, secret: String)
+        case list(latitude: Double, longitude: Double, page: Int)
+        case photo(farmId: String, serverId: String, photoId: String, secret: String)
         
         var stringValue: String {
             switch self {
-            case .list(let latitude, let longitude):
-                return "\(Endpoints.baseUrl)method=flickr.photos.search&api_key=\(Endpoints.apiKey)&format=json&privacy_filter=1&lat=\(latitude)&lon=\(longitude)&nojsoncallback=1&radius=10"
-            case .detail(let farmId, let serverId, let photoId, let secret):
+            case .list(let latitude, let longitude, let page):
+                return "\(Endpoints.baseUrl)method=flickr.photos.search&api_key=\(Endpoints.apiKey)&format=json&privacy_filter=1&lat=\(latitude)&lon=\(longitude)&nojsoncallback=1&radius=10&page=\(page)"
+            case .photo(let farmId, let serverId, let photoId, let secret):
                 return "https://farm\(farmId).staticflickr.com/\(serverId)/\(photoId)_\(secret)_s.jpg"
             }
         }
@@ -48,20 +48,19 @@ class ApiClient {
     static let decoder = JSONDecoder()
     static let encoder = JSONEncoder()
     
-    class func loadList(latitude: Double, longitude: Double, completion: @escaping (PhotosResponse?, ApiError?) -> Void) {
-        taskForGETRequest(url: Endpoints.list(latitude: latitude, longitude: longitude).url, responseType: PhotosResponse.self) {
+    class func loadList(latitude: Double, longitude: Double, page: Int, completion: @escaping (PhotosList?, ApiError?) -> Void) {
+        taskForGETRequest(url: Endpoints.list(latitude: latitude, longitude: longitude, page: page).url, responseType: PhotosResponse.self) {
             (photosResponse, error) in
             if error != nil {
                 completion(nil, error)
                 return
             }
-            
-            completion(photosResponse, nil)
+            completion(photosResponse?.photos, nil)
         }
     }
     
     class func loadPhoto(photo: Photo, result: @escaping (Data?, ApiError?) -> Void) {
-        let request = URLRequest(url: Endpoints.detail(farmId: photo.farmId!, serverId: photo.serverId!, photoId: photo.id!, secret: photo.secret!).url)
+        let request = URLRequest(url: Endpoints.photo(farmId: photo.farmId!, serverId: photo.serverId!, photoId: photo.id!, secret: photo.secret!).url)
         let task = URLSession.shared.dataTask(with: request) {data, response, error in
             if error != nil {
                 result(nil, .networkError)
