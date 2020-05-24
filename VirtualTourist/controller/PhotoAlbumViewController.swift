@@ -70,7 +70,7 @@ class PhotoAlbumViewController: UIViewController {
     func loadPhotosFromNetwork() {
         self.refreshButton.isEnabled = false
         ApiClient.loadList(latitude: selectedPin.latitude, longitude: selectedPin.longitude,
-                           page: Int(arc4random_uniform(UInt32(selectedPin.photosPages)))) { (photosList, error) in
+                           page: Int(arc4random_uniform(UInt32(selectedPin.photosPages))) + 1) { (photosList, error) in
             if error != nil {
                 self.showErrorAlert(error!, self)
                 return
